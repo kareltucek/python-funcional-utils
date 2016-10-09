@@ -126,7 +126,8 @@ class F:
         return F(f(self.val))
 
     # Maps the content over f and flattens the result. I.e., the expected type is 
-    # f: A -> Container[B], so such flatMap of List[A] results in type Container[B]
+    # f: A -> Container[B], mapping a type List[A] to Container[B]
+    # (of course all container types may be used)
     def flatMap(self, f):
         return F(map(f, self._toSeq())).flatten()
 
