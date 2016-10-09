@@ -14,9 +14,9 @@
 # F(['dog', 'fish', 'elephant'])\               # first we we create a list container and wrap it in F
 #         .map(lambda a: a[0].upper + a[1:])\   # animal names are capitalized
 #         .zipWithIndex()\                      # every record is zipped with its index, e.g. the result is F([('dog', 0), ('fish',1)...])
-#         .map(lambda a: (a[1], a[0]))\         # the pair is swapped
+#         .map(lambda a: (a[1], a[0]))\         # the pairs are swapped
 #         .toMap()\                             # the pair representation is converted to a dictionary
-#         .get()                                # finally we strip the F, so we have a plain dictionary
+#         .get()                                # finally we strip the F to obtain a plain dictionary
 #
 # Dictionaries
 # ============
