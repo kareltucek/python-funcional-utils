@@ -205,5 +205,3 @@ class F:
     def mapKeys(self, f):
         return F(self._toSeq()).map(lambda a: (f(a[0]), a[1]))
 
-print F({'a', 1}).getType()
-
