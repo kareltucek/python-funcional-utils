@@ -2,8 +2,8 @@
 #
 # Introduction
 # ============
-# This library provides sensible api to python's functional features. 
-# We define a new class F, which wraps a data container (e.g., a list
+# This library provides a sensible api to python's functional features. 
+# We define a class F, which wraps a data container (e.g., a list
 # or a map) and provides common functional constructs as methods.
 # This allows transformations to be chained in a readable manner.
 #
@@ -65,9 +65,38 @@ class F:
     def get(self):
         return self.val
 
+    def _getContType(self, v):
+        if(len(v) == 0):
+            return "???"
+        elif(type(v) == dict):
+            return '(' + self._getType(list(v.keys)[0]) + ', ' + self._getType(list(a.values)[0]) + ')'
+        elif(type(v) == list):
+            return str(self._getType(v[0])) 
+        elif(type(v) == set):
+            return str(self._getType(list(v)[0]))
+        else:
+            return "????"
+
+    def _getType(self, v):
+        if(type(v) == dict):
+            return 'dict[' + self._getContType(v) + ']'
+        elif(type(v) == list):
+            return 'list[' + self._getContType(v) + ']'
+        elif(type(v) == set):
+            return 'set[' + self._getContType(v) + ']'
+        else:
+            return str(type(v))
+
+    def getType(self):
+        return "F(" + self._getType(self.val) + ")"
+
+    def checkType(self, msg = ""):
+        print msg, self.getType()
+        return self
+
     # Debug method printing type and value
     def check(self, msg = ""):
-        print msg, type(self.val), ": ", self.val
+        print msg, self.getType(), ": ", self.val
         return self
 
     # Log prints the contained container using 'f' if 'on' is true; Returns again itself, so the computation can continue
@@ -176,4 +205,5 @@ class F:
     def mapKeys(self, f):
         return F(self._toSeq()).map(lambda a: (f(a[0]), a[1]))
 
+print F({'a', 1}).getType()
 
