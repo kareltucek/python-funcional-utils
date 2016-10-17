@@ -34,6 +34,10 @@ def bfold(c, a, b):
     else: 
         return b
 
+def updateDict(d1,d2):
+    d1.update(d2)
+    return d1
+
 class F:
     def _mapToSeq(self, m):
         return map(lambda k: (k, m.get(k)), m)
@@ -87,9 +91,11 @@ class F:
         else:
             return str(type(v))
 
+    # Returns string representation of the type. The type is resolved recursively, i.e., to the full depth of the firstbranch of the type tree.  
     def getType(self):
         return "F(" + self._getType(self.val) + ")"
 
+    # Debug method printing type only
     def checkType(self, msg = ""):
         print msg, self.getType()
         return self
@@ -160,8 +166,8 @@ class F:
     def flatMap(self, f):
         return F(map(f, self._toSeq())).flatten()
 
-    # Takes a function f: (A x B) -> B and an element 'd' of type B. Then the elements are 
-    # added to 'd' using 'f'. I.e., F([a,b,c]).fold(d, f) => F((a f (b f (c f d))))
+    # Takes a function f: (D x A) -> D and an element 'd' of type D. Then the elements are 
+    # added to 'd' using 'f'. I.e., F([a,b,c]).fold(d, f) => F(((d f a) f b) f c)
     def fold(self, d, f):
         if(type(self.val) == bool):
             if(self.val):
@@ -204,4 +210,17 @@ class F:
     # Maps only the first elements in a container of pairs (typically a dictionary)
     def mapKeys(self, f):
         return F(self._toSeq()).map(lambda a: (f(a[0]), a[1]))
+
+    # 
+    def observe(self, f):
+        f(self.val)
+        return self
+
+    # 
+    def through(self, f):
+        return self.map(f)
+
+    # 
+    def observeThrough(self, f):
+        return self.map(lambda a: (a, f(a)))
 
