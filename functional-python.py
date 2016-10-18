@@ -194,11 +194,6 @@ class F:
         else:
             return F(reduce(f, seq[1:], seq[0]))
 
-    # Applies a map f: A -> A x N by adding indices to the elements of type A
-    def zipWithIndex(self):
-        seq = self._toSeq()
-        return F([(seq[i], i) for i in range(len(seq))])
-
     # Filters the content of the contained container by f: A -> Boolean.
     def filter(self, f):
         return F(filter(f, self._toSeq())).toOrig(self.val)
@@ -227,8 +222,13 @@ class F:
     def zipWith(self, f):
         return self.map(lambda a: (a, f(a)))
 
-    # Zips the list with a constant f. E.g., F([1,2,4]).zipWith(1) produces F([(1,1),(2,1),(4,1)]
+    # Zips the list with a constant f. E.g., F([1,2,4]).zipWithConstant(1) produces F([(1,1),(2,1),(4,1)]
     def zipWithConstant(self, c):
         return self.map(lambda a: (a, c))
+
+    # Applies a map f: A -> A x N by adding indices to the elements of type A
+    def zipWithIndex(self):
+        seq = self._toSeq()
+        return F([(seq[i], i) for i in range(len(seq))])
 
 
