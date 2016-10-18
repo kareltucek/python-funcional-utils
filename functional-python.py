@@ -34,9 +34,17 @@ def bfold(c, a, b):
     else: 
         return b
 
-def updateDict(d1,d2):
-    d1.update(d2)
-    return d1
+def execute(a, b = None):
+    if(callable(a)):
+        a()
+    return b
+
+def println(*args):
+    for a in args:
+        print a
+
+def tupled(f):
+    return lambda a: f(*a)
 
 class F:
     def _mapToSeq(self, m):
@@ -211,16 +219,16 @@ class F:
     def mapKeys(self, f):
         return F(self._toSeq()).map(lambda a: (f(a[0]), a[1]))
 
-    # 
+    # Applies the function on the elements but does not change the container
     def observe(self, f):
-        f(self.val)
-        return self
+        return self.map(lambda a: execute(f(a), a))
 
-    # 
-    def through(self, f):
-        return self.map(f)
-
-    # 
-    def observeThrough(self, f):
+    # Zips the list with elements obtained by f. E.g., F([1,2,4]).zipWith(lambda a: a+1) produces F([(1,2),(2,3),(4,5)]
+    def zipWith(self, f):
         return self.map(lambda a: (a, f(a)))
+
+    # Zips the list with a constant f. E.g., F([1,2,4]).zipWith(1) produces F([(1,1),(2,1),(4,1)]
+    def zipWithConstant(self, c):
+        return self.map(lambda a: (a, c))
+
 
