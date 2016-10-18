@@ -73,7 +73,7 @@ class F:
         if(len(v) == 0):
             return "???"
         elif(type(v) == dict):
-            return '(' + self._getType(list(v.keys)[0]) + ', ' + self._getType(list(a.values)[0]) + ')'
+            return '(' + self._getType(list(v.keys())[0]) + ', ' + self._getType(list(v.values())[0]) + ')'
         elif(type(v) == list):
             return str(self._getType(v[0])) 
         elif(type(v) == set):
@@ -89,7 +89,7 @@ class F:
         elif(type(v) == set):
             return 'set[' + self._getContType(v) + ']'
         else:
-            return str(type(v))
+            return str(type(v)).replace("type ", "").replace("'", "")
 
     # Returns string representation of the type. The type is resolved recursively, i.e., to the full depth of the firstbranch of the type tree.  
     def getType(self):
