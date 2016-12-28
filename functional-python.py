@@ -70,7 +70,7 @@ class F:
         elif(type(self.val) == set):
             return self.val
         else:
-            print "warning: unflattenning an object of type" + type(self.val)
+            print "warning: unflattenning an object of type" + str(type(self.val))
             return [self.val]
 
     # Returns the data container, i.e., strips the F
