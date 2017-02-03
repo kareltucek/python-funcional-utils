@@ -41,7 +41,8 @@ def execute(a, b = None):
 
 def println(*args):
     for a in args:
-        print a
+        print a,
+    print
 
 def tupled(f):
     return lambda a: f(*a)
@@ -70,7 +71,7 @@ class F:
         elif(type(self.val) == set):
             return self.val
         else:
-            print "warning: unflattenning an object of type" + str(type(self.val))
+            print "warning: unflattenning an object of type" + type(self.val)
             return [self.val]
 
     # Returns the data container, i.e., strips the F
@@ -152,8 +153,10 @@ class F:
             return F(reduce(lambda a,b: a + b, self.val, []))
         elif(type(self.val[0]) == bool):
             return F(reduce(lambda a,b: a and b, self.val, True))
+        elif(isinstance(self.val[0], F)):
+            return F(reduce(lambda a,b: a + [b.val], self.val, []))
         else:
-            print "warning: unhandled type in flatten:", type(self.val)
+            print "warning: unhandled type in flatten:", type(self.val[0])
             return F(None)
 
     # Transforms the underlaying container to a dictionary.
@@ -187,10 +190,12 @@ class F:
 
     # Takes a function f: (A x A) -> A. Then interleaves the elements by f.
     # E.g., F([a,b,c]).reduce(f) => F((a f (b f c)))
-    def reduce(self, f):
+    def reduce(self, f, dv = None):
         seq = self._toSeq()
         if(len(seq) == 0):
-            return F(None)
+            if(dv == None):
+                print "warning: reducing empty sequence!"
+            return F(dv)
         else:
             return F(reduce(f, seq[1:], seq[0]))
 
